@@ -53,7 +53,7 @@ public class WordWithDeterminerFilter extends RuleFilter {
   @Override
   public RuleMatch acceptRuleMatch(RuleMatch match, Map<String, String> arguments, int patternTokenPos,
                                    AnalyzedTokenReadings[] patternTokens, List<Integer> tokenPositions) throws IOException {
-    JLanguageTool lt = Languages.getLanguageForShortCode("fr").createDefaultJLanguageTool();
+    JLanguageTool lt = getLanguageFromRuleMatch(match).createDefaultJLanguageTool();
     String wordFrom = getRequired("wordFrom", arguments);
     String determinerFrom = getRequired("determinerFrom", arguments);
     int posWord = 0;
@@ -61,7 +61,7 @@ public class WordWithDeterminerFilter extends RuleFilter {
     if (wordFrom != null && determinerFrom != null) {
       posWord = Integer.parseInt(wordFrom);
       if (posWord < 1 || posWord > patternTokens.length) {
-        throw new IllegalArgumentException("WordWithDeterminerFilter: Index out of bounds in "
+        throw new IllegalArgumentException("WordWithD(je viens deeterminerFilter: Index out of bounds in "
             + match.getRule().getFullId() + ", wordFrom: " + posWord);
       }
       posDeterminer = Integer.parseInt(determinerFrom);
