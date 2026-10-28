@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import static java.util.regex.Pattern.*;
 
-public final class MorfologikFrenchSpellerRule extends MorfologikSpellerRule {
+public class MorfologikFrenchSpellerRule extends MorfologikSpellerRule {
   private static final String SPELLING_FILE = "/fr/hunspell/spelling.txt";
 
   private static final int flags = CASE_INSENSITIVE | UNICODE_CASE;
