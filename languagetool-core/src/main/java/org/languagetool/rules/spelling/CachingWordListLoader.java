@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class CachingWordListLoader {
 
   // Speed up the server use case, where rules get initialized for every call.
-  private static final LoadingCache<String, List<String>> cache = CacheBuilder.newBuilder()
+  public static final LoadingCache<String, List<String>> cache = CacheBuilder.newBuilder()
       .expireAfterWrite(10, TimeUnit.MINUTES)
       .build(new CacheLoader<String, List<String>>() {
         @Override

@@ -31,6 +31,7 @@ import org.languagetool.rules.patterns.AbstractPatternRule;
 import org.languagetool.rules.patterns.PatternRuleLoader;
 import org.languagetool.rules.patterns.Unifier;
 import org.languagetool.rules.patterns.UnifierConfiguration;
+import org.languagetool.rules.spelling.CachingWordListLoader;
 import org.languagetool.rules.spelling.SpellingCheckRule;
 import org.languagetool.rules.spelling.multitoken.MultitokenSpeller;
 import org.languagetool.synthesis.Synthesizer;
@@ -260,12 +261,6 @@ public abstract class Language {
     return Collections.emptyList();
   }
 
-  /**
-   * Create an instance of the default spelling rule of this language
-   * Accessed (with caching) via getDefaultSpellingRule
-   * @since 5.5
-   */
-  private static final Map<Class<? extends Language>, SpellingCheckRule> spellingRules = new ConcurrentHashMap<>();
   @Nullable
   protected SpellingCheckRule createDefaultSpellingRule(ResourceBundle messages) throws IOException {
     return null;
@@ -278,14 +273,7 @@ public abstract class Language {
    */
   @Nullable
   public SpellingCheckRule getDefaultSpellingRule() {
-    return spellingRules.computeIfAbsent(getClass(), c -> {
-      try {
-        return createDefaultSpellingRule(ResourceBundleTools.getMessageBundle(this));
-      } catch (IOException e) {
-        logger.warn("Failed to create default spelling rule", e);
-        return null;
-      }
-    }) ;
+    return defaultSpellingRule.get();
   }
 
   /**
@@ -1050,6 +1038,15 @@ public abstract class Language {
 
   /** SCENARI API */
   public SpellingCheckRule createSpellingRule() throws IOException {
-    return createDefaultSpellingRule(ResourceBundleTools.getMessageBundle(this));
+      return createDefaultSpellingRule(ResourceBundleTools.getMessageBundle(this));
+  }
+
+  /** SCENARI API */
+  public Supplier<SpellingCheckRule> defaultSpellingRule;
+
+  /** SCENARI API */
+  public static void invalidateCacheLanguage(Language lang) {
+    CachingWordListLoader.cache.invalidateAll();
+    languagetoolInstances.remove(lang.getClass());
   }
 }
