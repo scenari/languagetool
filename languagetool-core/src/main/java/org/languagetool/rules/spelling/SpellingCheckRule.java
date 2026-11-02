@@ -655,4 +655,14 @@ public abstract class SpellingCheckRule extends Rule {
     return true;
   }
 
+
+  /** SCENARI API */
+  public void addIgnoreLines(List<String> lines) {
+    lines.forEach(this::addIgnoreWords);
+  }
+
+  /** SCENARI API */
+  public void  addProhibitedLines(List<String> lines) {
+    addProhibitedWords(lines);
+  }
 }

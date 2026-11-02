@@ -1048,4 +1048,8 @@ public abstract class Language {
     return Collections.emptyList();
   }
 
+  /** SCENARI API */
+  public SpellingCheckRule createSpellingRule() throws IOException {
+    return createDefaultSpellingRule(ResourceBundleTools.getMessageBundle(this));
+  }
 }
