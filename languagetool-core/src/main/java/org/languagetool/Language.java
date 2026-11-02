@@ -274,8 +274,16 @@ public abstract class Language {
    */
   @Nullable
   public SpellingCheckRule getDefaultSpellingRule() {
-    return defaultSpellingRule.get();
+    if (defaultSpellingRule != null) return defaultSpellingRule.get();
+    if (defaultSpellingCheckRule == null) try {
+      defaultSpellingCheckRule = createSpellingRule();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return defaultSpellingCheckRule;
   }
+
+  protected SpellingCheckRule defaultSpellingCheckRule;
 
   /**
    * Retrieve default spelling rule for this language
